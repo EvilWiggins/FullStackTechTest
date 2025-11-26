@@ -4,7 +4,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_CONNECTION_STRING": "Server=127.0.0.1;Port=3306;Uid=root;Pwd=pass;Database=fourteenfish;"
       },
       "applicationUrl": "https://localhost:53204;http://localhost:53205"
     }
