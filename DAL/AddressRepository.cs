@@ -57,13 +57,16 @@ public class AddressRepository : IAddressRepository
 
     private Address PopulateAddress(IDataRecord data)
     {
+        var idValue = data["Id"]?.ToString();
+        var personIdValue = data["PersonId"]?.ToString();
+
         var address = new Address
         {
-            Id = int.Parse(data["Id"].ToString()),
-            PersonId = int.Parse(data["Id"].ToString()),
-            Line1 = data["Line1"].ToString(),
-            City = data["City"].ToString(),
-            Postcode = data["Postcode"].ToString()
+            Id = !string.IsNullOrEmpty(idValue) ? int.Parse(idValue) : 0,
+            PersonId = !string.IsNullOrEmpty(personIdValue) ? int.Parse(personIdValue) : 0,
+            Line1 = data["Line1"]?.ToString() ?? string.Empty,
+            City = data["City"]?.ToString() ?? string.Empty,
+            Postcode = data["Postcode"]?.ToString() ?? string.Empty
         };
         return address;
     }
