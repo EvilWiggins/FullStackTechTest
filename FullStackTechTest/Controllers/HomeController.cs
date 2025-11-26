@@ -21,28 +21,60 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var model = await IndexViewModel.CreateAsync(_personRepository);
-        return View(model);
+        try
+        {
+            var model = await IndexViewModel.CreateAsync(_personRepository);
+            return View(model);
+
+        } catch(Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while loading the Index page.");
+            return RedirectToAction("Error");
+        }
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var model = await DetailsViewModel.CreateAsync(id, false, _personRepository, _addressRepository);
-        return View(model);
+        try
+        {
+            var model = await DetailsViewModel.CreateAsync(id, false, _personRepository, _addressRepository);
+            return View(model);
+
+        } catch(Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while loading the Details page for Person ID {PersonId}.", id);
+            return RedirectToAction("Error");
+        }
     }
 
     public async Task<IActionResult> Edit(int id)
     {
-        var model = await DetailsViewModel.CreateAsync(id, true, _personRepository, _addressRepository);
-        return View("Details", model);
+        try
+        {
+            var model = await DetailsViewModel.CreateAsync(id, true, _personRepository, _addressRepository);
+            return View("Details", model);
+
+        } catch(Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while loading the Edit page for Person ID {PersonId}.", id);
+            return RedirectToAction("Error");
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> Edit(int id, [FromForm] DetailsViewModel model)
     {
-        await _personRepository.SaveAsync(model.Person);
-        await _addressRepository.SaveAsync(model.Address);
-        return RedirectToAction("Details", new { id = model.Person.Id });
+        try
+        {
+            await _personRepository.SaveAsync(model.Person);
+            await _addressRepository.SaveAsync(model.Address);
+            return RedirectToAction("Details", new { id = model.Person.Id });
+
+        } catch(Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while saving the Edit page for Person ID {PersonId}.", id);
+            return RedirectToAction("Error");
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

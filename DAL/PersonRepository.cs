@@ -82,10 +82,10 @@ public class PersonRepository : IPersonRepository
     {
         var person = new Person
         {
-            Id = int.Parse(data["Id"].ToString()),
-            FirstName = data["FirstName"].ToString(),
-            LastName = data["LastName"].ToString(),
-            GMC = int.Parse(data["GMC"].ToString())
+            Id = int.TryParse(data["Id"]?.ToString(), out var id) ? id : 0,
+            FirstName = data["FirstName"]?.ToString() ?? string.Empty,
+            LastName = data["LastName"]?.ToString() ?? string.Empty,
+            GMC = int.TryParse(data["GMC"]?.ToString(), out var gmc) ? gmc : 0
         };
         return person;
     }
