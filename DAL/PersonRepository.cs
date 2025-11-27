@@ -7,6 +7,80 @@ namespace DAL;
 
 public class PersonRepository : IPersonRepository
 {
+    public async Task<Person?> GetByGMCAsync(int gmcNumber)
+    {
+        Person? person = null;
+
+        var sql = new StringBuilder();
+        sql.AppendLine("SELECT * FROM people");
+        sql.AppendLine("WHERE GMC = @gmcNumber");
+
+        await using(var connection = new MySqlConnection(Config.DbConnectionString))
+        {
+            await connection.OpenAsync();
+
+            var command = new MySqlCommand(sql.ToString(), connection);
+            command.Parameters.AddWithValue("gmcNumber", gmcNumber);
+
+            var reader = await command.ExecuteReaderAsync();
+            if(await reader.ReadAsync())
+            {
+                person = PopulatePerson(reader);
+            }
+        }
+
+        return person;
+    }
+
+    public async Task<Person> GetByIdAsync(int personId)
+    {
+        var person = new Person();
+
+        var sql = new StringBuilder();
+        sql.AppendLine("SELECT * FROM people");
+        sql.AppendLine("WHERE Id = @personId");
+
+        await using(var connection = new MySqlConnection(Config.DbConnectionString))
+        {
+            await connection.OpenAsync();
+
+            var command = new MySqlCommand(sql.ToString(), connection);
+            command.Parameters.AddWithValue("personId", personId);
+
+            var reader = await command.ExecuteReaderAsync();
+            if(await reader.ReadAsync())
+            {
+                person = PopulatePerson(reader);
+            }
+        }
+
+        return person;
+    }
+
+    public async Task<int> InsertAsync(Person person)
+    {
+        var sql = new StringBuilder();
+        sql.AppendLine("INSERT INTO people (FirstName, LastName, GMC)");
+        sql.AppendLine("VALUES (@firstName, @lastName, @gmc);");
+        sql.AppendLine("SELECT LAST_INSERT_ID();");
+
+        int newId;
+
+        await using (var connection = new MySqlConnection(Config.DbConnectionString))
+        {
+            await connection.OpenAsync();
+
+            var command = new MySqlCommand(sql.ToString(),  connection);
+            command.Parameters.AddWithValue("firstName", person.FirstName);
+            command.Parameters.AddWithValue("lastName", person.LastName);
+            command.Parameters.AddWithValue("gmc", person.GMC);
+
+            newId = Convert.ToInt32(await command.ExecuteScalarAsync());
+        }
+
+        return newId;
+    }
+
     public async Task<List<Person>> ListAllAsync()
     {
         var peopleList = new List<Person>();
@@ -29,32 +103,6 @@ public class PersonRepository : IPersonRepository
 
         return peopleList;
     }
-
-    public async Task<Person> GetByIdAsync(int personId)
-    {
-        var person = new Person();
-        
-        var sql = new StringBuilder();
-        sql.AppendLine("SELECT * FROM people");
-        sql.AppendLine("WHERE Id = @personId");
-
-        await using (var connection = new MySqlConnection(Config.DbConnectionString))
-        {
-            await connection.OpenAsync();
-
-            var command = new MySqlCommand(sql.ToString(), connection);
-            command.Parameters.AddWithValue("personId", personId);
-
-            var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
-            {
-                person = PopulatePerson(reader);
-            }
-        }
-
-        return person;
-    }
-
     public async Task SaveAsync(Person person)
     {
         var sql = new StringBuilder();

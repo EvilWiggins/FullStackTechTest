@@ -2,7 +2,8 @@ create table people (
     Id INT PRIMARY KEY auto_increment,
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
-    GMC INT
+    GMC INT,
+    UNIQUE KEY UX_people_GMC (GMC)
 );
 insert into people (FirstName, LastName, GMC) values ('Karilynn', 'Rock', 1169492);
 insert into people (FirstName, LastName, GMC) values ('Arlyn', 'Coetzee', 8836597);

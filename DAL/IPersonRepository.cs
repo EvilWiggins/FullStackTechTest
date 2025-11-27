@@ -4,7 +4,12 @@ namespace DAL;
 
 public interface IPersonRepository
 {
-    Task<List<Person>> ListAllAsync();
+    Task<Person?> GetByGMCAsync(int gmcNumber);
+
     Task<Person> GetByIdAsync(int personId);
+
+    Task<int> InsertAsync(Person person);
+
+    Task<List<Person>> ListAllAsync();
     Task SaveAsync(Person person);
 }
