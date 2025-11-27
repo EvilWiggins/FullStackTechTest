@@ -8,7 +8,7 @@ namespace Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int GMC { get; set; }
+        public string GMC { get; set; }
         public ImportAddressDto Address { get; set; }
     }
 }
