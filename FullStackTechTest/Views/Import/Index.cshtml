@@ -1,0 +1,39 @@
+﻿@model Models.ImportResult;
+@{
+    ViewData["Title"] = "Import Doctors";
+}
+<div class="container">
+    <h2>Import Doctors</h2>
+
+    <form asp-action="Index" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <label class="form-label">Select JSON File</label>
+            <input type="file" name="jsonFile" class="form-control" accept=".json,application/json" />
+        </div>
+        <button class="btn btn-primary" type="submit">Upload and Import</button>
+    </form>
+
+    @if(Model.TotalRecords > 0 || Model.Errors.Any())
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Import Summary</h5>
+                <p class="card-text">Total Records: @Model.TotalRecords</p>
+                <p class="card-text text-success">Imported: @Model.Inserted</p>
+                <p class="card-text text-danger">Skipped (existing GMC): @Model.SkippedExisting</p>
+            </div>
+        </div>
+    }
+
+    @if(Model.Errors.Any())
+    {
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach(var error in Model.Errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
