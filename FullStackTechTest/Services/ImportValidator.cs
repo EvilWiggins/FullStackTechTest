@@ -11,12 +11,7 @@ namespace FullStackTechTest.Services
 
             foreach(var doctor in doctors)
             {
-                var gmcRaw = doctor.GMC?.Trim() ?? string.Empty;
-                if(!int.TryParse(gmcRaw, out var gmc))
-                {
-                    result.Errors.Add($"GMC must be numeric for Dr {doctor.FirstName} {doctor.LastName}".Trim()); 
-                    continue;
-                }
+                var gmc = doctor.GMC;
 
                 if(gmc < 1000000 || gmc > 9999999)
                 {
@@ -30,8 +25,7 @@ namespace FullStackTechTest.Services
                     continue;
                 }
 
-                doctor.Address ??= new ImportAddressDto();
-                doctor.GMC = gmc.ToString("D7");
+                doctor.Address ??= [];
                 result.ValidDoctors.Add(doctor);
             }
 

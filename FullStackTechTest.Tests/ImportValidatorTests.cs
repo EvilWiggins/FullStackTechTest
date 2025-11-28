@@ -13,8 +13,8 @@ namespace FullStackTechTest.Tests
         {
             var payload = new[]
             {
-                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = "1234567" },
-                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = "7654321" }
+                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = 1234567 },
+                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = 7654321 }
             };
 
             var result = _importValidator.Validate(payload);
@@ -28,8 +28,8 @@ namespace FullStackTechTest.Tests
         {
             var payload = new[]
             {
-                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = "12345" },
-                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = "76543210" }
+                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = 12345 },
+                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = 76543210 }
             };
             
             var result = _importValidator.Validate(payload);
@@ -45,8 +45,8 @@ namespace FullStackTechTest.Tests
         {
             var payload = new[]
             {
-                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = "1234567" },
-                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = "1234567" }
+                new ImportDoctorDto { FirstName = "Alice", LastName = "Smith", GMC = 1234567 },
+                new ImportDoctorDto { FirstName = "Bob", LastName = "Jones", GMC = 1234567 }
             };
 
             var result = _importValidator.Validate(payload);

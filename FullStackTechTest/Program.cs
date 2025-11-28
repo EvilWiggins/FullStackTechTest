@@ -1,5 +1,7 @@
 using DAL;
 
+using FullStackTechTest.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +11,8 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 // DI
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<ImportValidator>();
+builder.Services.AddScoped<IImportService, ImportService>();
 
 var app = builder.Build();
 
