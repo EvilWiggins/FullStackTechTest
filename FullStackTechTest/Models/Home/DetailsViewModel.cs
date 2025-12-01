@@ -13,11 +13,18 @@ public class DetailsViewModel
 
     public static async Task<DetailsViewModel> CreateAsync(int personId, bool isEditing, IPersonRepository personRepository, IAddressRepository addressRepository, ISpecialtyRepository specialtyRepository)
     {
+        var person = await personRepository.GetByIdAsync(personId);
+        var address = await addressRepository.GetForPersonIdAsync(personId);
+        var availableSpecialties = await specialtyRepository.ListAllAsync();
+        var personSpecialties = await specialtyRepository.ListForPersonAsync(personId);
+
         var model = new DetailsViewModel
         {
-            Person = await personRepository.GetByIdAsync(personId),
-            Address = await addressRepository.GetForPersonIdAsync(personId),
-            IsEditing = isEditing
+            Person = person,
+            Address = address,
+            IsEditing = isEditing,
+            AvailableSpecialties = availableSpecialties,
+            SelectedSpecialtyIds = [.. personSpecialties.Select(s => s.Id)]
         };
         return model;
     }

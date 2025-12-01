@@ -2,8 +2,6 @@
 
 using MySql.Data.MySqlClient;
 
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
@@ -13,7 +11,7 @@ namespace DAL
     {
         public async Task AssignToPersonAsync(int personId, int specialtyId)
         {
-            const string sql = "INSERT IGNORE INTO person_specialties (PersonId, SpecialtyId) VALUES (@personId}, @specialtyId);";
+            const string sql = "INSERT IGNORE INTO people_specialties (PersonId, SpecialtyId) VALUES (@personId, @specialtyId);";
 
             await using var conn = new MySqlConnection(Config.DbConnectionString);
             await conn.OpenAsync();
@@ -92,7 +90,7 @@ namespace DAL
             const string sql = @"
                 SELECT s.Id, s.Name
                 FROM specialties s
-                INNER JOIN person_specialties ps ON s.Id = ps.SpecialtyId
+                INNER JOIN people_specialties ps ON s.Id = ps.SpecialtyId
                 WHERE ps.PersonId = @personId
                 ORDER BY s.Name;";
 
@@ -115,7 +113,7 @@ namespace DAL
 
         public async Task RemoveFromPersonAsync(int personId, int specialtyId)
         {
-            const string sql = "DELETE FROM person_specialties WHERE PersonId = @personId AND SpecialtyId = @specialtyId;";
+            const string sql = "DELETE FROM people_specialties WHERE PersonId = @personId AND SpecialtyId = @specialtyId;";
             await using var conn = new MySqlConnection(Config.DbConnectionString);
             await conn.OpenAsync();
             var cmd = new MySqlCommand(sql, conn);
