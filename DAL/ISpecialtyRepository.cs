@@ -4,13 +4,19 @@ namespace DAL
 {
     public interface ISpecialtyRepository
     {
-        Task<List<Specialty>> ListAllAsync();
-        Task<Specialty?> GetByIdAsync(string id);
+        Task AssignToPersonAsync(int personId, int specialtyId);
+
+        Task DeleteAsync(int id);
+
+        Task<Specialty?> GetByIdAsync(int id);
+
         Task<int> InsertAsync(Specialty specialty);
-        Task UpdateAsync(Specialty specialty);
-        Task DeleteAsync(string id);
+
+        Task<List<Specialty>> ListAllAsync();
         Task<List<Specialty>> ListForPersonAsync(int personId);
-        Task AssignToPersonAsync(int personId, string specialtyId);
-        Task RemoveFromPersonAsync(int personId, string specialtyId);
+
+        Task RemoveFromPersonAsync(int personId, int specialtyId);
+
+        Task UpdateAsync(Specialty specialty);
     }
 }

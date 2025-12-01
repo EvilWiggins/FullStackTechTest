@@ -13,6 +13,7 @@ builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<ImportValidator>();
 builder.Services.AddScoped<IImportService, ImportService>();
+builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
 var app = builder.Build();
 
