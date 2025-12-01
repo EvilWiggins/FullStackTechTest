@@ -15,7 +15,8 @@ public class HomeControllerPostTests
     {
         var personRepo = new Mock<IPersonRepository>();
         var addressRepo = new Mock<IAddressRepository>();
-        var controller = new HomeController(Mock.Of<ILogger<HomeController>>(), personRepo.Object, addressRepo.Object);
+        var specialtyRepo = new Mock<ISpecialtyRepository>();
+        var controller = new HomeController(Mock.Of<ILogger<HomeController>>(), personRepo.Object, addressRepo.Object, specialtyRepo.Object);
 
         var model = new DetailsViewModel
         {

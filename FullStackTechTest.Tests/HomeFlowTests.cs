@@ -22,7 +22,8 @@ public class HomeFlowTests
         personRepo.Setup(r => r.ListAllAsync()).ReturnsAsync(people);
 
         var addressRepo = new Mock<IAddressRepository>();
-        var controller = new HomeController(Mock.Of<ILogger<HomeController>>(), personRepo.Object, addressRepo.Object);
+        var specialtyRepo = new Mock<ISpecialtyRepository>();
+        var controller = new HomeController(Mock.Of<ILogger<HomeController>>(), personRepo.Object, addressRepo.Object, specialtyRepo.Object);
 
         var result = await controller.Index();
 
@@ -38,6 +39,7 @@ public class HomeFlowTests
         const int personId = 5;
         var person = new Person { Id = personId, FirstName = "Ada", LastName = "Lovelace", GMC = 7654321 };
         var address = new Address { Id = 10, PersonId = personId, Line1 = "1 Loop St", City = "Byteville", Postcode = "AB1 2CD" };
+        var specialtyRepo = new Mock<ISpecialtyRepository>();
 
         var personRepo = new Mock<IPersonRepository>();
         personRepo.Setup(r => r.GetByIdAsync(personId)).ReturnsAsync(person);
@@ -45,7 +47,7 @@ public class HomeFlowTests
         var addressRepo = new Mock<IAddressRepository>();
         addressRepo.Setup(r => r.GetForPersonIdAsync(personId)).ReturnsAsync(address);
 
-        var model = await DetailsViewModel.CreateAsync(personId, true, personRepo.Object, addressRepo.Object);
+        var model = await DetailsViewModel.CreateAsync(personId, true, personRepo.Object, addressRepo.Object, specialtyRepo.Object);
 
         Assert.Same(person, model.Person);
         Assert.Same(address, model.Address);

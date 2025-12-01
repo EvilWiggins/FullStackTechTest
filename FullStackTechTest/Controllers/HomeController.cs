@@ -11,12 +11,14 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IPersonRepository _personRepository;
     private readonly IAddressRepository _addressRepository;
+    private readonly ISpecialtyRepository _specialtyRepository;
 
-    public HomeController(ILogger<HomeController> logger, IPersonRepository personRepository, IAddressRepository addressRepository)
+    public HomeController(ILogger<HomeController> logger, IPersonRepository personRepository, IAddressRepository addressRepository, ISpecialtyRepository specialtyRepository)
     {
         _logger = logger;
         _personRepository = personRepository;
         _addressRepository = addressRepository;
+        _specialtyRepository = specialtyRepository;
     }
 
     public async Task<IActionResult> Index()
@@ -37,7 +39,7 @@ public class HomeController : Controller
     {
         try
         {
-            var model = await DetailsViewModel.CreateAsync(id, false, _personRepository, _addressRepository);
+            var model = await DetailsViewModel.CreateAsync(id, false, _personRepository, _addressRepository, _specialtyRepository);
             return View(model);
 
         } catch(Exception ex)
@@ -51,7 +53,7 @@ public class HomeController : Controller
     {
         try
         {
-            var model = await DetailsViewModel.CreateAsync(id, true, _personRepository, _addressRepository);
+            var model = await DetailsViewModel.CreateAsync(id, true, _personRepository, _addressRepository, _specialtyRepository);
             return View("Details", model);
 
         } catch(Exception ex)
@@ -68,6 +70,21 @@ public class HomeController : Controller
         {
             await _personRepository.SaveAsync(model.Person);
             await _addressRepository.SaveAsync(model.Address);
+
+            var currentSpecialties = await _specialtyRepository.ListForPersonAsync(model.Person.Id) ?? [];
+            var currentIds = currentSpecialties.Select(s => s.Id).ToHashSet();
+            var desiredIds = model.SelectedSpecialtyIds.ToHashSet() ?? new HashSet<int>(); 
+
+            foreach(var toAdd in desiredIds.Except(currentIds))
+            {
+                await _specialtyRepository.AssignToPersonAsync(model.Person.Id, toAdd);
+            }
+
+            foreach(var toRemove in currentIds.Except(desiredIds))
+            {
+                await _specialtyRepository.RemoveFromPersonAsync(model.Person.Id, toRemove);
+            }
+
             return RedirectToAction("Details", new { id = model.Person.Id });
 
         } catch(Exception ex)
