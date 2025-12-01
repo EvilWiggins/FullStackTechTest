@@ -15,8 +15,8 @@ public class DetailsViewModel
     {
         var person = await personRepository.GetByIdAsync(personId);
         var address = await addressRepository.GetForPersonIdAsync(personId);
-        var availableSpecialties = await specialtyRepository.ListAllAsync();
-        var personSpecialties = await specialtyRepository.ListForPersonAsync(personId);
+        var availableSpecialties = await specialtyRepository.ListAllAsync() ?? new List<Specialty>();
+        var personSpecialties = await specialtyRepository.ListForPersonAsync(personId) ?? new List<Specialty>();
 
         var model = new DetailsViewModel
         {
