@@ -76,7 +76,6 @@ namespace FullStackTechTest.Tests
             repo.Verify(r => r.DeleteAsync(3), Times.Once);
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(SpecialtiesController.Index), redirectResult.ActionName);
-
         }
     }
 }
