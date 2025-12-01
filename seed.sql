@@ -53,3 +53,22 @@ insert into addresses (PersonId, Line1, City, Postcode) values (17, '5 Cherry Ri
 insert into addresses (PersonId, Line1, City, Postcode) values (18, 'Tyn Y Ddol', 'Penmachno', 'LL24 0UP');
 insert into addresses (PersonId, Line1, City, Postcode) values (19, '1 Stable Way', 'Stoke Heath', 'B60 3QW');
 insert into addresses (PersonId, Line1, City, Postcode) values (20, '8 Smallbrook Road', 'Broadway', 'WR12 7EP');
+
+CREATE TABLE specialties (
+    Id INT PRIMARY KEY auto_increment,
+    Name VARCHAR(100) NOT NULL,
+    UNIQUE KEY UX_specialties_Name (Name)
+);
+
+CREATE TABLE people_specialties (
+    PersonId INT,
+    SpecialtyId INT,
+    PRIMARY KEY (PersonId, SpecialtyId),
+    CONSTRAINT FK_people_specialties_Person FOREIGN KEY (PersonId) REFERENCES people(Id) on delete cascade,
+    CONSTRAINT FK_people_specialties_Specialty FOREIGN KEY (SpecialtyId) REFERENCES specialties(Id) on delete cascade
+);
+
+insert into specialties (Name) values
+('Anaesthetics'), ('Cardiology'), ('Dermatology'), ('Emergency Medicine'),
+('General Practice (GP)'), ('Neurology'), ('Obstetrics and Gynaecology'),
+('Ophthalmology'), ('Orthopaedic Surgery'), ('Psychiatry');
